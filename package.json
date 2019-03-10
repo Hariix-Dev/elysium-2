@@ -1,0 +1,36 @@
+{
+	"name": "elysium-2",
+	"version": "0.0.0",
+	"description": "ElysiumBotV2",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "Hariix-Elysium/elysium2"
+	},
+	"author": {
+		"name": "Hariix_",
+		"email": "elysium.hariix@gmail.com",
+		"discord": "Hariix_#3692"
+	},
+	"license": "MIT",
+	"contributors": [
+		"Hariix_#3692"
+	],
+	"dependencies": {
+		"chalk": "^2.4.2",
+		"discord.js": "^11.4.2",
+		"dotenv": "^6.2.0",
+		"ffmpeg": "0.0.4",
+		"fs": "0.0.1-security",
+		"http": "0.0.0",
+		"moment": "^2.24.0",
+		"moment-timezone": "^0.5.23",
+		"mysql": "^2.16.0",
+		"opusscript": "0.0.6",
+		"path": "^0.12.7",
+		"request": "^2.88.0"
+	}
+}

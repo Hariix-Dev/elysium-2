@@ -1,0 +1,10 @@
+.env
+.buildslog.json
+.package-lock.json
+.editorconfig
+.vscode
+node_modules
+test
+buildslog.json
+package-lock.json
+android-com.js
