@@ -1,3 +1,6 @@
+/*jshint esversion: 6 */
+/*jshint -W032 */
+
 const fs =require("fs");
 const chalk = require("chalk");
 const path = require("path");
@@ -25,9 +28,10 @@ function log(message, type, bot) {
 	if(!message) {
 		log("Le paramètre 'message' est obligatoire", "FATAL");
 	} else {
+		var filename;
 		if(path.basename(__filename) == "app.js") {
-			var filename = "MAIN";
-		} else var filename = path.basename(__filename);
+			filename = "MAIN";
+		} else filename = path.basename(__filename);
 		var txt = chalk.magenta("[" + date + "] [" + time + "]") + " [" + chalk.gray(filename) + "/" + ctype + "] : " + message;
 		var noColorTxt = "[" + date + "] [" + time + "] [" + filename + "/" + type + "] : " + message;
 
