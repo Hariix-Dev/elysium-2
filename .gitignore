@@ -8,3 +8,9 @@ test
 buildslog.json
 package-lock.json
 android-com.js
+GraphXP.*
+M6XP.xlsx
+~$M6XP.xlsx
+logs.log
+*.url
+icons-lists.txt

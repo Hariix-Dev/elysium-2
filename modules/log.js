@@ -37,7 +37,7 @@ function log(message, type, bot) {
 
 		console.log(txt);
 
-		bot.channels.get(config.logChannel).send(noColorTxt).catch(error => {
+		bot.channels.get(config.log_id).send(noColorTxt).catch(error => {
 			log("Message non envoyé: " + error, "WARN");
 		});
 		buildslog.push(noColorTxt);
@@ -74,7 +74,7 @@ exports.log = function(message, type, bot, file) {
 
 		console.log(txt);
 
-		bot.channels.get(config.logChannel).send(noColorTxt).catch(error => {
+		bot.channels.get(config.log_id).send(noColorTxt).catch(error => {
 			log("Message non envoyé: " + error, "WARN", bot);
 		});
 		buildslog.push(noColorTxt);
