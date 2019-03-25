@@ -1,7 +1,7 @@
 {
 	"name": "elysium-2",
-	"version": "0.1.0",
-	"description": "ElysiumBotV2",
+	"version": "1.0.0-alpha",
+	"description": "",
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,8 @@
 	},
 	"author": {
 		"name": "Hariix_",
-		"email": "elysium.hariix@gmail.com",
+		"email": "vincent.bernhardt67@gmail.com",
+		"url": "https://github.com/Hariix-Dev",
 		"discord": "Hariix_#3692"
 	},
 	"license": "MIT",
@@ -22,11 +23,15 @@
 	"dependencies": {
 		"chalk": "^2.4.2",
 		"discord.js": "^11.4.2",
-		"dotenv": "^6.2.0",
+		"djs-commands": "^1.2.2",
+		"dotenv": "^7.0.0",
 		"ffmpeg": "0.0.4",
 		"fs": "0.0.1-security",
+		"hex-to-dec": "^1.0.1",
 		"moment": "^2.24.0",
+		"ms": "^2.1.1",
 		"mysql": "^2.16.0",
-		"opusscript": "0.0.6"
+		"path": "^0.12.7",
+		"request": "^2.88.0"
 	}
 }
