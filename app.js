@@ -5,6 +5,7 @@
 require("dotenv").config();
 
 const { CommandHandler } = require("djs-commands");
+const hexToDec = require("./modules/hexConverter");
 const Discord = require("discord.js");
 const request = require("request");
 const chalk = require("chalk");
@@ -15,6 +16,7 @@ const config = require("./assets/config.json");
 const converter = require("./modules/data");
 const logger = require("./modules/logger");
 const reply = require("./modules/replyEmbed");
+const colors = require("./assets/colors.json");
 
 if(parseInt(process.versions.node.split(".")[0]) < 8) {
 	request(process.env.SERVER + "requirements.json", function(err, response, body) {
@@ -148,7 +150,7 @@ bot.on("message", message => {
 		if((!result) || (!result[0]) || (!result[0].prefix) || (!result[0].lang)) return message.channel.send(new Discord.RichEmbed({
 			title: ":x: Veuillez patienter, s'il vous plaît.",
 			description: "La base de données sera prête au prochain message. Une mise à jour est responsable de cette erreur. Il se peux que les données utilisateurs soient aussi supprimée, si tel est le cas le prochain message créera votre compte. Excusez nous pour ce dérangement, cette erreur est rare. Le responsable de ce serveur peux faire une demande de récupération de données, mais rien n'est garanti... Support prioritaire: vincent.bernhardt67@gmail.com",
-			color: color.red
+			color: hexToDec.hexToDec(colors.red)
 		}));
 
 		var settings = {
@@ -217,13 +219,13 @@ bot.on("message", message => {
 
 						if(data.lang == "fr") {
 							channel.send(new Discord.RichEmbed({
-								color: color.blue,
+								color: hexToDec.hexToDec(colors.blue),
 								title: ":bell: " + message.author.username + ", vous passez au niveau **" + pos + "**!"
 							}));
 						} else {
 							if(data.lang == "en") {
 								channel.send(new Discord.RichEmbed({
-									color: color.blue,
+									color: hexToDec.hexToDec(colors.blue),
 									title: ":bell: " + message.author.username + ", you're going to level **" + pos + "**!"
 								}));
 							};
@@ -250,9 +252,9 @@ bot.on("message", message => {
 				return;
 			} else {
 				try {
-					cmd.run(bot, message, args, data, settings);
+					cmd.run(bot, message, args, data, settings, db);
 				} catch(e) {//Don't use 'err' it may be overwritten in IE 8 and earlier. (W002)
-					log(e, "ERROR");
+					log("La commande à rentrée un problème:\n" + e, "ERROR");
 				};
 			};
 		});
@@ -263,10 +265,11 @@ bot.on("ready", () => {
 	log("Client pret est connecté à discord.", "INFO");
 	bot.user.setActivity("Elysium", {
 		type: "WATCHING"
-	});
+	}).catch();
 
 	db.connect(function(err) {
 		if(err) return log("Une erreur est survenue lors de la connexion à la base de données: " + err, "FATAL");
+
 		log("Base de données connectée avec succés.", "INFO");
 		db.init();
 	});
@@ -289,6 +292,10 @@ bot.on("guildMemberAdd", member => {
 			});
 		};
 	});
+});
+
+bot.on("guildCreate", guild => {
+	createServer(guild);
 });
 
 bot.login(process.env.TOKEN).catch(err => {

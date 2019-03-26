@@ -16,7 +16,7 @@ const hexToDec = require("hex-to-dec");
 exports.sendError = function(text, message, timeout) {
 	var temp = message.guild.emojis.find(temp => temp.name === "elysiumcancel");
 	var rEmbed;
-	var color = hexToDec(colors.red);
+	var color = hexToDec.hexToDec(colors.red);
 
 	if(!temp) {
 		if(text.length >= 255) {
@@ -59,7 +59,7 @@ exports.sendError = function(text, message, timeout) {
 exports.sendConfirm = function(text, message, timeout) {
 	var temp = message.guild.emojis.find(temp => temp.name === "elysiumcheck");
 	var rEmbed;
-	var color = hexToDec(colors.green);
+	var color = hexToDec.hexToDec(colors.green);
 
 	if(!temp) {
 		if(text.length >= 255) {

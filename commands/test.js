@@ -10,7 +10,7 @@ module.exports = class test {
 		this.usage = "/test";
 	};
 
-	run(bot, message, args, data, settings) {
+	run(bot, message, args, data, settings, db) {
 		message.reply("ok!");
 	};
 };
