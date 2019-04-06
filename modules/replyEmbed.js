@@ -3,7 +3,7 @@
 /* jshint -W030*/
 const Discord = require("discord.js");
 const colors = require("../assets/colors.json");
-const hexToDec = require("hex-to-dec");
+const hexToDec = require("../modules/hexConverter");
 
 /**
  *
@@ -34,12 +34,12 @@ exports.sendError = function(text, message, timeout) {
 		if(text.length >= 255) {
 			rEmbed = new Discord.RichEmbed({
 				color: color,
-				description: `<elysiumcancel:${temp.id}> ${text}`
+				description: `<:elysiumcancel:${temp.id}> ${text}`
 			});
 		} else {
 			rEmbed = new Discord.RichEmbed({
 				color: color,
-				title: `<elysiumcancel:${temp.id}> ${text}`
+				title: `<:elysiumcancel:${temp.id}> ${text}`
 			});
 		};
 	};
@@ -77,12 +77,12 @@ exports.sendConfirm = function(text, message, timeout) {
 		if(text.length >= 255) {
 			rEmbed = new Discord.RichEmbed({
 				color: color,
-				description: `<elysiumcheck:${temp.id}> ${text}`
+				description: `<:elysiumcheck:${temp.id}> ${text}`
 			});
 		} else {
 			rEmbed = new Discord.RichEmbed({
 				color: color,
-				title: `<elysiumcheck:${temp.id}> ${text}`
+				title: `<:elysiumcheck:${temp.id}> ${text}`
 			});
 		};
 	};

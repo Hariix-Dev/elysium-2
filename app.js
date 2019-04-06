@@ -2,15 +2,17 @@
 /* jshint -W032 */
 /* ts -80001*/
 
+//https://github.com/visionmedia/node-progress PROGRESS BAR
+
 require("dotenv").config();
 
 const { CommandHandler } = require("djs-commands");
 const hexToDec = require("./modules/hexConverter");
 const Discord = require("discord.js");
 const request = require("request");
+const sparkly = require("sparkly");
 const chalk = require("chalk");
 const mysql = require("mysql");
-const ms = require("ms");
 
 const config = require("./assets/config.json");
 const converter = require("./modules/data");
@@ -42,7 +44,7 @@ var db = mysql.createConnection({
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME,
 	port: process.env.DB_PORT,
-	timezone: "Europe/France",
+	timezone: "Europe/Paris",
 	charset: config.encode,
 	typeCast: true,
 	debug: false,
@@ -51,20 +53,9 @@ var db = mysql.createConnection({
 
 var queued = {};
 
-const log = (message, level) => logger(message, level, bot);
+const log = (message, level) => logger(message, level, bot, __filename);
 
 function createServer(guild) {
-	db.query("SELECT server_id FROM servers_settings WHERE server_id = " + guild.id + ";", function(err, result, fields) {
-		if(err) log("Une erreur est survenue lors de la recherche du serveur: " + err, "ERROR");
-
-		if((!result) || (!result[0]) || (!result[0].server_id)) {
-			//options must be converted to decimal: https://www.rapidtables.com/convert/number/binary-to-decimal.html
-			db.query("INSERT INTO servers_settings VALUES (" + guild.id + ", '/', 'fr', '€', 750, 0, 4)", function(err, result, fields) {
-				if(err) return log("Une erreur est survenue lors de l'enregistrement du serveur: " + err, "FATAL");
-			});
-		};
-	});
-
 	if(guild.me.hasPermission("MANAGE_EMOJIS", false, true, true)) {
 		var temp;
 
@@ -74,6 +65,17 @@ function createServer(guild) {
 		temp = guild.emojis.find(temp => temp.name === "elysiumcancel");
 		if(!temp) guild.createEmoji(process.env.SERVER + "assets/emotes/cancel.png", "elysiumcancel").catch();
 	};
+
+	db.query("SELECT server_id FROM servers_settings WHERE server_id = " + guild.id + ";", function(err, result, fields) {
+		if(err) log("Une erreur est survenue lors de la recherche du serveur: " + err, "FATAL");
+
+		if((!result) || (!result[0]) || (!result[0].server_id)) {
+			//options must be converted to decimal: https://www.rapidtables.com/convert/number/binary-to-decimal.html
+			db.query(`INSERT INTO servers_settings VALUES (${guild.id}, '${config.default.prefix}', '${config.default.lang}', '${config.default.currency}', ${config.default.money}, 0, ${config.default.options});`, function(err, result, fields) {
+				if(err) return log("Une erreur est survenue lors de l'enregistrement du serveur: " + err, "ERROR");
+			});
+		};
+	});
 };
 
 db.init = function() {
@@ -86,7 +88,7 @@ db.init = function() {
 	 * options: 0 à 16777215,
 	 */
 
-	db.query("CREATE TABLE IF NOT EXISTS servers_settings (server_id BIGINT UNSIGNED NOT NULL, prefix VARCHAR(5) NOT NULL, lang CHAR(2) NOT NULL, money_char VARCHAR(2) NOT NULL, start_money INT UNSIGNED NOT NULL, announcements_channel_id BIGINT UNSIGNED NOT NULL, options MEDIUMINT UNSIGNED NOT NULL, PRIMARY KEY (server_id)) ENGINE = INNODB;", function(err, result, fields) {
+	db.query("CREATE TABLE IF NOT EXISTS servers_settings (server_id BIGINT UNSIGNED NOT NULL, prefix VARCHAR(5) NOT NULL, lang CHAR(2) NOT NULL, money_char VARCHAR(3) NOT NULL, start_money INT UNSIGNED NOT NULL, announcements_channel_id BIGINT UNSIGNED NOT NULL, options MEDIUMINT UNSIGNED NOT NULL, PRIMARY KEY (server_id)) ENGINE = INNODB;", function(err, result, fields) {
 		if(err) return log("La table " + chalk.green("'servers_settings'") + " n'a pas pû être créé: " + err, "FATAL");
 		log("La table " + chalk.green("'servers_settings'") + " à été vérifiée.", "INFO");
 	});
@@ -134,8 +136,6 @@ bot.on("message", message => {
 			var query = message.content.slice(1);
 			
 			db.query(query, function(err, result, fields) {
-				var temp = message.guild.emojis.find(temp => temp.name === "elysiumcancel");
-
 				if(err) return sendE(err);
 				if(!result) return sendE("Pas de données renvoyées.");
 
@@ -165,7 +165,7 @@ bot.on("message", message => {
 		CH.prefix = settings.prefix;
 
 		db.query("SELECT id, lang, messages, caracters, money, xp, level, bans, kicks FROM users WHERE user_id = " + message.author.id + " AND server_id = " + message.guild.id + ";", function(err, result, fields) {
-			if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "ERROR");
+			if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
 	
 			if((!result) || (!result[0]) || (!result[0].id) || (!result[0].lang)) {
 				db.query("INSERT INTO users VALUES (null, " + message.author.id + ", " + message.guild.id + ", '" + settings.defaultLang + "', 0, 0, " + settings.startMoney + ", 0, 0, 0, 0)", function(err, result, fields) {
@@ -218,13 +218,13 @@ bot.on("message", message => {
 						if(err) return log("La mise à jour du niveau de l'utilisateur '" + message.author.id + "' à échouée sur le serveur '" + message.guild.id + "': " + err, "ERROR");
 
 						if(data.lang == "fr") {
-							channel.send(new Discord.RichEmbed({
+							message.channel.send(new Discord.RichEmbed({
 								color: hexToDec.hexToDec(colors.blue),
 								title: ":bell: " + message.author.username + ", vous passez au niveau **" + pos + "**!"
 							}));
 						} else {
 							if(data.lang == "en") {
-								channel.send(new Discord.RichEmbed({
+								message.channel.send(new Discord.RichEmbed({
 									color: hexToDec.hexToDec(colors.blue),
 									title: ":bell: " + message.author.username + ", you're going to level **" + pos + "**!"
 								}));
@@ -254,7 +254,7 @@ bot.on("message", message => {
 				try {
 					cmd.run(bot, message, args, data, settings, db);
 				} catch(e) {//Don't use 'err' it may be overwritten in IE 8 and earlier. (W002)
-					log("La commande à rentrée un problème:\n" + e, "ERROR");
+					log("La commande à rencontrée un problème:\n" + e, "ERROR");
 				};
 			};
 		});
@@ -296,6 +296,19 @@ bot.on("guildMemberAdd", member => {
 
 bot.on("guildCreate", guild => {
 	createServer(guild);
+});
+
+db.on("error", err => {
+	log("La base de données à rencontrée une erreur: " + err, "FATAL");
+
+	db.destroy();
+
+	db.connect(function(err) {
+		if(err) return log("Une erreur est survenue lors de la reconnexion à la base de données: " + err, "FATAL");
+
+		log("Base de données reconnectée avec succés.", "INFO");
+		db.init();
+	});
 });
 
 bot.login(process.env.TOKEN).catch(err => {

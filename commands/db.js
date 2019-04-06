@@ -4,7 +4,9 @@
 const Discord = require("discord.js");
 const config = require("../assets/config.json");
 const colors = require("../assets/colors.json");
-const hexToDec = require("../modules/hexConverter");
+const converter = require("../modules/hexConverter");
+const logger = require("../modules/logger");
+const reply = require("../modules/replyEmbed");
 
 module.exports = class db {
 	constructor() {
@@ -16,6 +18,9 @@ module.exports = class db {
 	run(bot, message, args, data, settings, db) {
 		var sendE = (text, timeout) => reply.sendError(text, message, timeout);
 		var sendC = (text, timeout) => reply.sendConfirm(text, message, timeout);
+
+		const log = (message, level) => logger(message, level, bot, __filename);
+
 		if(message.author.id != config.ownerId) return;
 		
 		if(args.length == 1) {
@@ -57,7 +62,7 @@ module.exports = class db {
 					};
 
 					message.channel.send(new Discord.RichEmbed({
-						color: hexToDec.hexToDec(colors.purple),
+						color: converter.hexToDec(colors.purple),
 						thumbnail: {
 							url: process.env.SERVER + "assets/thumbnails/database.png"
 						},
@@ -88,11 +93,11 @@ module.exports = class db {
 			});
 		} else {
 			if(args.length == 2) {
-				switch(args) {
+				switch(args[1]) {
 					case "kill":
 						db.destroy();
 
-						log("La connection à la base de donnée à été rompu par " + user.toString() + "/" + message.user.id + ".", "WARN");
+						log("La connection à la base de donnée à été rompu par <@" + message.user.id + ">/" + message.user.id + ".", "WARN");
 						sendC("La connection à la base de donnée à été rompu.");
 					break;
 
@@ -103,21 +108,25 @@ module.exports = class db {
 								return sendE("Une erreur est survenu lors de la fin de la connection à la base de données.");
 							};
 
-							log("La connection s'est terminée avec success par " + user.toString() + "/" + message.user.id + ".", "WARN");
+							log("La connection s'est terminée avec success par <@" + message.user.id + ">/" + message.user.id + ".", "WARN");
 							sendC("La connection s'est terminée avec success.");
 						});
 					break;
 
 					case "delete":
-						db.query("DROP TABLE users, servers_settings;", function(err, result, fields) {
+						db.query("DROP TABLE users, servers_settings, bans;", function(err, result, fields) {
 							if(err) {
 								log("La mise à zéro de la base de donnée à échouée: " + err, "ERROR");
 								return sendE("La mise à zéro de la base de donnée à échouée: " + err);
 							};
 
-							log("La base de données à été mise à zéro par " + user.toString() + "/" + message.user.id + ".", "WARN");
+							log("La base de données à été mise à zéro par <@" + message.user.id + ">/" + message.user.id + ".", "WARN");
 							sendC("La base de données à été mise à zéro.");
 						});
+					break;
+
+					case "debug":
+						log("/" + db.config.debug, "INFO");
 					break;
 
 					default: return;
@@ -126,8 +135,9 @@ module.exports = class db {
 				if(args.length == 3) {
 					var table;
 
-					if(args[2] == ("server" || "servers")) table = "servers_settings";
-					if(args[2] == ("user" || "users")) table = "users";
+					if(args[2] === ("server" || "servers")) table = "servers_settings";
+					if(args[2] === ("user" || "users")) table = "users";
+					if(args[2] === ("ban" || "bans")) table = "bans";
 
 					switch (args[1]) {
 						case "delete":
@@ -137,7 +147,7 @@ module.exports = class db {
 									return sendE("La table **'" + table + "'** n'a pas pû être supprimée: " + err);
 								};
 
-								log("La table **'" + table + "'** à été supprimée par " + user.toString() + "/" + message.user.id + ".", "WARN");
+								log("La table **'" + table + "'** à été supprimée par <@" + message.user.id + ">/" + message.user.id + ".", "WARN");
 								sendC("La table **'" + table + "'** à été supprimée avec success.");
 							});
 						break;
@@ -149,7 +159,7 @@ module.exports = class db {
 									return sendE("La table **'" + table + "'** n'a pas pû être nettoyée: " + err);
 								};
 
-								log("La table **'" + table + "'** à été nettoyée par " + user.toString() + "/" + message.user.id + ".", "WARN");
+								log("La table **'" + table + "'** à été nettoyée par <@" + message.user.id + ">/" + message.user.id + ".", "WARN");
 								sendC("La table **'" + table + "'** à été nettoyée avec success.");
 							});
 						break;

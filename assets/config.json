@@ -2,5 +2,12 @@
 	"name": "Elysium",
 	"logId": "474172120486903809",
 	"encode": "utf8",
-	"ownerId": "247369303899242506"
+	"ownerId": "247369303899242506",
+	"default": {
+		"prefix": "/",
+		"lang": "fr",
+		"currency": "€",
+		"money": 750,
+		"options": 4
+	}
 }

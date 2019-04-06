@@ -3,12 +3,17 @@
 const config = require("../assets/config.json");
 const chalk = require("chalk");
 const moment = require("moment");
+const path = require("path");
 
-module.exports = (message, level, bot) => {
+module.exports = (message, level, bot, filepath) => {
 	var date = moment().format("DD/MM/YYYY");
 	var time = moment().format("HH:mm:ss:SSS");
 
 	var colored = {};
+
+	var source = path.basename(filepath);
+
+	if(source === "app.js") source = "MAIN";
 
 	switch(level) {
 		case "INFO":
@@ -31,14 +36,18 @@ module.exports = (message, level, bot) => {
 			colored.level = chalk.bgRed(level);
 		break;
 
-		default: colored.level = chalk.green(level);
+		default: colored.level = chalk.green("INFO");
 	};
+
+
 
 	if(!message) {
 		message = "Le paramêtre 'message' est obligatoire.";
-		colored.level = chalk.red(level);
+		colored.level = chalk.red("ERROR");
 	};
 
-	console.log(`${chalk.magenta(`[${date}] [${time}]`)} [${chalk.gray("MAIN")}/${colored.level}] : ${message}`);
-	bot.channels.get(config.logId).send(`[${date}] [${time}] [MAIN/${level}] : ${message}`).catch();
+	console.log(`${chalk.magenta(`[${date}] [${time}]`)} [${chalk.gray(source)}/${colored.level}] : ${message}`);
+	bot.channels.get(config.logId).send(`[${date}] [${time}] [${source}/${level}] : ${message}`).then(temp => {
+		if(level === "FATAL") process.exit(1);
+	}).catch();
 };

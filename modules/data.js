@@ -1,6 +1,5 @@
 /*jshint esversion: 6 */
 /*jshint -W032 */
-
 const fs = require("fs");
 
 exports.getFileSize = function(file) {
