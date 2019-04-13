@@ -70,6 +70,6 @@ module.exports = class avatar {
 				if(data.lang === "fr") return sendE("Arguments invalides. Syntaxe: " + settings.prefix + "avatar <@user>");
 				if(data.lang === "en") return sendE("Arguments invalids. Syntax:" + settings.prefix + "avatar <@user>");
 			break;
-		}
+		};
 	};
 };

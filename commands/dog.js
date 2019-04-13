@@ -7,7 +7,6 @@ const request = require("request");
 const logger = require("../modules/logger");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
-const colors = require("../assets/colors.json");
 
 let url = "http://random.dog/woof";
 

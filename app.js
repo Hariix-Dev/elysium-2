@@ -144,6 +144,7 @@ bot.on("message", message => {
 		};
 	};
 
+	log("<" + message.guild.roles);
 	db.query("SELECT prefix, lang, money_char, start_money, announcements_channel_id, options FROM servers_settings WHERE server_id = '" + message.guild.id + "';", function(err, result, fields) {
 		if(err) return log("Les paramètres du serveur " + chalk.green("'" + message.guild.id + "'") + " n'ont pas pû être obtenus: " + err, "FATAL");
 

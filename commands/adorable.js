@@ -5,44 +5,40 @@ const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const colors = require("../assets/colors.json");
 const converter = require("../modules/hexConverter");
-const request = require("request");
-const logger = require("../modules/logger");
 
 module.exports = class adorable {
 	constructor() {
 		this.name = "adorable",
 		this.alias = ["ad"],
-		this.usage = "/adorable <id>";
+		this.usage = "/adorable [id]";
 	};
 
 	run(bot, message, args, data, settings, db) {
 		var sendE = (text, timeout) => reply.sendError(text, message, timeout);
 
-		var log = (message, level) => logger(message, level, bot, __filename);
-
+		let id;
 		if(args.length === 1) {
-			if(data.lang === "fr") return sendE("Argument 'id' absent. Syntaxe: " + settings.prefix + "adorable <id>");
-			if(data.lang === "en") return sendE("Argument 'id' absent. Syntax:" + settings.prefix + "adorable <id>");
+			id = message.author.id;
 		} else {
 			args.shift();
-			let id = args.join("%20");
-
-			let link = "https://api.adorable.io/avatars/285/" + id + ".png";
-
-			let description;
-
-			if(data.lang === "fr") description = "[Lien du fichier](" + link + ")";
-			if(data.lang === "en") description = "[Link to the file](" + link + ")";
-
-			let embed = new Discord.RichEmbed({
-				color: converter.hexToDec(colors.darkGreen),
-				description: description,
-				image: {
-					url: link
-				}
-			});
-
-			message.channel.send(embed);
+			id = args.join("%20");
 		};
+		
+		let link = "https://api.adorable.io/avatars/285/" + id + ".png";
+
+		let description;
+
+		if(data.lang === "fr") description = "> [Lien du fichier](" + link + ")";
+		if(data.lang === "en") description = "> [Link to the file](" + link + ")";
+
+		let embed = new Discord.RichEmbed({
+			color: converter.hexToDec(colors.darkGreen),
+			description: description,
+			image: {
+				url: link
+			}
+		});
+
+		message.channel.send(embed);
 	};
 };

@@ -2,35 +2,24 @@
 /* jshint -W032 */
 /* jshint -W030*/
 const Discord = require("discord.js");
-
-const request = require("request");
-const logger = require("../modules/logger");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
+const logger = require("../modules/logger");
+const request = require("request");
 
-//API latency?
-let url = "http://aws.random.cat/meow";
-
-module.exports = class cat {
+module.exports = class pikachu {
 	constructor() {
-		this.name = "cat",
-		this.alias = [],
-		this.usage = "/cat";
+		this.name = "pikachu",
+		this.alias = ["pika"],
+		this.usage = "/pikachu";
 	};
 
 	run(bot, message, args, data, settings, db) {
-		var sendE = (text, timeout) => reply.sendError(text, message, timeout);
+		var sendE = (txt, timeout) => reply.sendError(txt, message, timeout);
 
-		const log = (message, level) => logger(message, level, bot, __filename);
+		var log = (txt, level) => logger(txt, level, bot, __filename);
 
-		let q = {
-			url: url,
-			json: false
-		};
-
-		let hex = Math.floor(Math.random() * 16777215).toString(16);
-
-		request(q, function(err, response, body) {
+		request("https://some-random-api.ml/pikachuimg", function(err, response, body) {
 			if(err || response.statusCode != 200) {
 				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
 				if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
@@ -38,13 +27,14 @@ module.exports = class cat {
 				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
 			};
 
-			let cat = JSON.parse(body);
+			let hex = Math.floor(Math.random() * 16777215).toString(16);
 
-			//.mp4 image is not supported now
+			let image = JSON.parse(body);
+
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(hex),
 				image: {
-					url: cat.file,
+					url: image.link
 				}
 			});
 
