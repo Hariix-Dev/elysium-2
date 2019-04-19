@@ -14,14 +14,15 @@ module.exports = class roles {
 
 	run(bot, message, args, data, settings, db) {
 		let numberRoles = message.guild.roles.size;
-		let rolesList = message.guild.roles.join("\n- ");
+		let rolesList = message.guild.roles.map(r => r.name).join("\n- ");
+		rolesList = rolesList.replace("@everyone", "");
 
 		let embed;
 
 		if(data.lang === "fr") {
 			embed = new Discord.RichEmbed({
 				color: converter.hexToDec(colors.black),
-				title: numberRoles + " roles.",
+				title: numberRoles + " roles:",
 				author: {
 					icon_url: message.guild.iconURL,
 					name: "Listes des roles:"
@@ -32,7 +33,7 @@ module.exports = class roles {
 			if(data.lang === "en") {
 				embed = new Discord.RichEmbed({
 					color: converter.hexToDec(colors.black),
-					title: numberRoles + " roles.",
+					title: numberRoles + " roles:",
 					author: {
 						icon_url: message.guild.iconURL,
 						name: "Roles:"

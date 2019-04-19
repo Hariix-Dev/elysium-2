@@ -35,18 +35,17 @@ module.exports = class lyrics {
 
 			let embed;
 			let d = JSON.parse(body);
-			let description;
+			let multipart = [];
+			let lyric = d.lyrics;
 
-			if(d.lyrics.length >= 2048) {
-				if(data.lang === "fr") description = "**Les paroles de cette musiques sont trop longues...**\n__Dans la version payante ce problème sera corrigé avec un multipart (Comme les SMS).__";
-				if(data.lang === "en") description = "**The lyrics of this music are too long...**\n__In the premium version this error must be fixed with a multipart (Like SMS)__";
-			} else description = d.lyrics;
+			for(var i = 0; i < lyric.length; i += 2000) {
+				var content = lyric.toString().slice(i, i + 2000);
+				multipart.push(content);
+			};
 
 			if(data.lang === "fr") {
 				embed = new Discord.RichEmbed({
 					color: converter.hexToDec(colors.yellow),
-					title: "Paroles",
-					description: description,
 					fields: [
 						{
 							name: "Titre",
@@ -76,8 +75,6 @@ module.exports = class lyrics {
 				if(data.lang === "en") {
 					embed = new Discord.RichEmbed({
 						color: converter.hexToDec(colors.yellow),
-						title: "Lyrics",
-						description: description,
 						fields: [
 							{
 								name: "Title",
@@ -106,10 +103,19 @@ module.exports = class lyrics {
 				};
 			};
 
-			message.channel.send(embed).then(temp => {
-				setTimeout(function() {
-					temp.delete().catch();
-				}, 300000);
+			message.channel.send(embed).then(() => {
+				multipart.forEach(lyrics => {
+					let base = new Discord.RichEmbed({
+						color: converter.hexToDec(colors.yellow),
+						description: lyrics
+					});
+
+					message.channel.send(base).then(temp => {
+						setTimeout(function() {
+							temp.delete().catch();
+						}, 300000);
+					}).catch();
+				});
 			}).catch();
 		});
 	};

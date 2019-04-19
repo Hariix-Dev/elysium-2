@@ -52,8 +52,13 @@ module.exports = class server {
 					break;
 
 					case "ANNOUNCEMENTCHANNEL":
-						if(data.lang === "fr") return message.channel.send("L'id du salons général est ``" + settings.announcementsChannel + "``.");
+						if(data.lang === "fr") return message.channel.send("L'id du salon général est ``" + settings.announcementsChannel + "``.");
 						if(data.lang === "en") return message.channel.send("The id of the general channel is ``" + settings.announcementsChannel + "``.");
+					break;
+
+					case "MUSICCHANNEL":
+						if(data.lang === "fr") return message.channel.send("L'id du salon pour la musique est ``" + settings.musicChannel + "``.");
+						if(data.lang === "en") return message.channel.send("The id of the music room is ``" + settings.musicChannel + "``.");
 					break;
 
 					case "GENCHANNEL":
@@ -152,20 +157,26 @@ module.exports = class server {
 					break;
 
 					case "STARTMONEY":
-						log(typeof value);
-
-						if(value < 0 || value > 4294967295) log("ok");
+						if(value < 0 || value > 4294967295) {
+							
+						};
 
 						if(data.lang === "fr") return message.channel.send("La somme de départ est de ``" + settings.startMoney + " " + settings.currency + "``.");
 						if(data.lang === "en") return message.channel.send("The starting sum is ``" + settings.startMoney + " " + settings.currency + "``.");
 					break;
 
 					case "ANNOUNCEMENTCHANNEL":
+					//DONE THIS
 						if(data.lang === "fr") return message.channel.send("L'id du salons général est ``" + settings.announcementsChannel + "``.");
 						if(data.lang === "en") return message.channel.send("The id of the general channel is ``" + settings.announcementsChannel + "``.");
 					break;
 
 					case "GENCHANNEL":
+						if(data.lang === "fr") return message.channel.send("L'id du salons général est ``" + settings.announcementsChannel + "``.");
+						if(data.lang === "en") return message.channel.send("The id of the general channel is ``" + settings.announcementsChannel + "``.");
+					break;
+
+					case "MUSICCHANNEL":
 						if(data.lang === "fr") return message.channel.send("L'id du salons général est ``" + settings.announcementsChannel + "``.");
 						if(data.lang === "en") return message.channel.send("The id of the general channel is ``" + settings.announcementsChannel + "``.");
 					break;

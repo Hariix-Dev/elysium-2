@@ -7,7 +7,7 @@
 require("dotenv").config();
 
 const { CommandHandler } = require("djs-commands");
-const { Pool, Client } = require("pg");
+const { Pool } = require("pg");
 const hexToDec = require("./modules/hexConverter");
 const Discord = require("discord.js");
 const request = require("request");
@@ -39,7 +39,7 @@ const db = new Pool({
 });
 
 const bot = new Discord.Client({
-	disableEveryone: true
+	disableEveryone: false
 });
 
 const CH = new CommandHandler({
@@ -65,7 +65,7 @@ function createServer(guild) {
 
 		if((!result) || (!result.rows[0]) || (!result.rows[0].server_id)) {
 			//options must be converted to decimal: https://www.rapidtables.com/convert/number/binary-to-decimal.html
-			db.query(`INSERT INTO servers_settings (server_id, prefix, lang, money_char, start_money, announcements_channel_id, options) VALUES (${guild.id}, '${config.default.prefix}', '${config.default.lang}', '${config.default.currency}', ${config.default.money}, 0, ${config.default.options});`, function(err, result, fields) {
+			db.query(`INSERT INTO servers_settings (server_id, prefix, lang, money_char, start_money, announcements_channel_id, music_voice_id, options) VALUES (${guild.id}, '${config.default.prefix}', '${config.default.lang}', '${config.default.currency}', ${config.default.money}, 0, 0, ${config.default.options});`, function(err, result, fields) {
 				if(err) return log("Une erreur est survenue lors de l'enregistrement du serveur: " + err, "ERROR");
 			});
 		};
@@ -82,7 +82,7 @@ db.init = function() {
 	 * options: 0 à 16777215,
 	 */
 
-	db.query("CREATE TABLE IF NOT EXISTS servers_settings (server_id BIGINT NOT NULL, prefix VARCHAR(5) NOT NULL, lang CHAR(2) NOT NULL, money_char VARCHAR(3) NOT NULL, start_money INT NOT NULL, announcements_channel_id BIGINT NOT NULL, options BIGINT NOT NULL, PRIMARY KEY (server_id));", function(err, result, fields) {
+	db.query("CREATE TABLE IF NOT EXISTS servers_settings (server_id BIGINT NOT NULL, prefix VARCHAR(5) NOT NULL, lang CHAR(2) NOT NULL, money_char VARCHAR(3) NOT NULL, start_money INT NOT NULL, announcements_channel_id BIGINT NOT NULL, music_voice_id BIGINT NOT NULL, options BIGINT NOT NULL, PRIMARY KEY (server_id));", function(err, result, fields) {
 		if(err) return log("La table " + chalk.green("'servers_settings'") + " n'a pas pû être créé: " + err, "FATAL");
 		log("La table " + chalk.green("'servers_settings'") + " à été vérifiée.", "INFO");
 	});
@@ -138,7 +138,7 @@ bot.on("message", message => {
 		};
 	};
 
-	db.query("SELECT prefix, lang, money_char, start_money, announcements_channel_id, options FROM servers_settings WHERE server_id = '" + message.guild.id + "';", function(err, result, fields) {
+	db.query("SELECT prefix, lang, money_char, start_money, announcements_channel_id, music_voice_id, options FROM servers_settings WHERE server_id = '" + message.guild.id + "';", function(err, result, fields) {
 		if(err) return log("Les paramètres du serveur " + chalk.green("'" + message.guild.id + "'") + " n'ont pas pû être obtenus: " + err, "FATAL");
 
 		if((!result) || (!result.rows[0]) || (!result.rows[0].prefix) || (!result.rows[0].lang)) return message.channel.send(new Discord.RichEmbed({
@@ -153,6 +153,7 @@ bot.on("message", message => {
 			currency: result.rows[0].money_char,
 			startMoney: result.rows[0].start_money,
 			announcementsChannel: result.rows[0].announcements_channel_id,
+			musicChannel: result.rows[0].music_voice_id,
 			plugins: result.rows[0].options
 		};
 
@@ -280,7 +281,7 @@ bot.on("guildCreate", guild => {
 db.on("error", err => {
 	log("La base de données à rencontrée une erreur: " + err, "FATAL");
 
-	db.destroy();
+	db.end();
 
 	db.connect(function(err) {
 		if(err) return log("Une erreur est survenue lors de la reconnexion à la base de données: " + err, "FATAL");
