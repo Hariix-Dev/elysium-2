@@ -17,6 +17,8 @@ module.exports = class disconnect {
 
 		const log = (message, level) => logger(message, level, bot, __filename);
 
+		message.delete().catch();
+
 		if(!message.guild.voiceConnection) {
 			if(data.lang === "fr") return sendE("Je ne suis connecté à aucun salon vocal sur ce serveur.");
 			if(data.lang === "en") return sendE("I am not connected to any voice salon on this server.");
@@ -31,7 +33,7 @@ module.exports = class disconnect {
 			if(data.lang === "en") return sendE("An error has occured.");
 		};
 
-		if(data.lang) return sendC("Je me suis déconnecter du salon vocal.");
-		if(data.lang) return sendC("I disconnected from the voice channel.");
+		if(data.lang) return sendC("Je me suis déconnecter du salon vocal.", 25);
+		if(data.lang) return sendC("I disconnected from the voice channel.", 25);
 	};
 };

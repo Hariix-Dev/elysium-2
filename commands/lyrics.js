@@ -5,8 +5,8 @@ const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const colors = require("../assets/colors.json");
 const converter = require("../modules/hexConverter");
-const request = require("request");
 const logger = require("../modules/logger");
+const api = require("some-random-api");
 
 module.exports = class lyrics {
 	constructor() {
@@ -21,22 +21,13 @@ module.exports = class lyrics {
 		var log = (txt, level) => logger(txt, level, bot, __filename);
 
 		args.shift();
-		let title = args.join("%20");
 
-		let link = "https://some-random-api.ml/lyrics?title=" + title;
-
-		request(link, function(err, response, body) {
-			if(err || response.statusCode !== 200) {
-				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
-				if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
-
-				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-			};
-
+		api.lyrics(args).then(lyrics => {
 			let embed;
-			let d = JSON.parse(body);
 			let multipart = [];
-			let lyric = d.lyrics;
+			let lyric = lyrics.lyrics;
+
+			message.channel.startTyping();
 
 			for(var i = 0; i < lyric.length; i += 2000) {
 				var content = lyric.toString().slice(i, i + 2000);
@@ -49,22 +40,22 @@ module.exports = class lyrics {
 					fields: [
 						{
 							name: "Titre",
-							value: d.title,
+							value: lyrics.title,
 							inline: true
 						},
 						{
 							name: "Auteur",
-							value: d.author,
+							value: lyrics.author,
 							inline: true
 						},
 						{
 							name: "Source",
-							value: d.links.genius,
+							value: lyrics.links.genius,
 							inline: false
 						}
 					],
 					thumbnail: {
-						url: d.thumbnail.genius
+						url: lyrics.thumbnail.genius
 					},
 					author: {
 						icon_url: process.env.SERVER + "assets/thumbnails/music-player.png",
@@ -78,22 +69,22 @@ module.exports = class lyrics {
 						fields: [
 							{
 								name: "Title",
-								value: d.title,
+								value: lyrics.title,
 								inline: true
 							},
 							{
 								name: "Author",
-								value: d.author,
+								value: lyrics.author,
 								inline: true
 							},
 							{
 								name: "Link",
-								value: d.links.genius,
+								value: lyrics.links.genius,
 								inline: false
 							}
 						],
 						thumbnail: {
-							url: d.thumbnail.genius
+							url: lyrics.thumbnail.genius
 						},
 						author: {
 							icon_url: process.env.SERVER + "assets/thumbnails/music-player.png",
@@ -111,12 +102,19 @@ module.exports = class lyrics {
 					});
 
 					message.channel.send(base).then(temp => {
+						message.channel.stopTyping();
+
 						setTimeout(function() {
 							temp.delete().catch();
 						}, 300000);
 					}).catch();
 				});
 			}).catch();
+		}).catch(err => {
+			if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+			if(data.lang === "en") sendE("An error occurred, try again later...");
+
+			return log(err, "ERROR");
 		});
 	};
 };

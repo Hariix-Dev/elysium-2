@@ -7,8 +7,7 @@ const request = require("request");
 const logger = require("../modules/logger");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
-
-let url = "http://random.dog/woof";
+const api = require("some-random-api");
 
 module.exports = class dog {
 	constructor() {
@@ -22,30 +21,22 @@ module.exports = class dog {
 
 		const log = (message, level) => logger(message, level, bot, __filename);
 
-		let q = {
-			url: url,
-			json: false
-		};
+		api.dogimg().then(img => {
+			let hex = Math.floor(Math.random() * 16777215).toString(16);
 
-		let hex = Math.floor(Math.random() * 16777215).toString(16);
-
-		request(q, function(err, response, body) {
-			if(err || response.statusCode != 200) {
-				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
-				if(data.lang === "en") sendE("An error occurred, try again later...");
-
-				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-			};
-
-			//.mp4 image is not supported now
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(hex),
 				image: {
-					url: "http://random.dog/" + body,
+					url: img,
 				}
 			});
 
 			message.channel.send(embed);
+		}).catch(err => {
+			if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+			if(data.lang === "en") sendE("An error occurred, try again later...");
+
+			return log(err, "ERROR");
 		});
 	};
 };

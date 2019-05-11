@@ -5,13 +5,13 @@ const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
 const logger = require("../modules/logger");
-const request = require("request");
+const api = require("some-random-api");
 
 module.exports = class redpanda {
 	constructor() {
 		this.name = "redpanda",
 		this.alias = [],
-		this.usage = "/respanda";
+		this.usage = "/redpanda";
 	};
 
 	run(bot, message, args, data, settings, db) {
@@ -19,26 +19,22 @@ module.exports = class redpanda {
 
 		var log = (txt, level) => logger(txt, level, bot, __filename);
 
-		request("https://some-random-api.ml/img/red_panda", function(err, response, body) {
-			if(err || response.statusCode != 200) {
-				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
-				if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
-
-				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-			};
-
+		api.redpandaimg().then(img => {
 			let hex = Math.floor(Math.random() * 16777215).toString(16);
-
-			let image = JSON.parse(body);
 
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(hex),
 				image: {
-					url: image.link
+					url: img
 				}
 			});
 
 			message.channel.send(embed);
+		}).catch(err => {
+			if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+			if(data.lang === "en") sendE("An error occurred, try again later...");
+
+			return log(err, "ERROR");
 		});
 	};
 };

@@ -5,7 +5,7 @@ const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
 const logger = require("../modules/logger");
-const request = require("request");
+const api = require('some-random-api');
 
 module.exports = class memes {
 	constructor() {
@@ -19,27 +19,22 @@ module.exports = class memes {
 
 		var log = (txt, level) => logger(txt, level, bot, __filename);
 
-		request("https://some-random-api.ml/meme", function(err, response, body) {
-			if(err || response.statusCode != 200) {
-				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
-				if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
-
-				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-			};
-
-			let hex = Math.floor(Math.random() * 16777215).toString(16);
-
-			let meme = JSON.parse(body);
-
+		let hex = Math.floor(Math.random() * 16777215).toString(16);
+		
+		api.meme().then(meme => {
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(hex),
-				description: "**" + meme.text + "**",
 				image: {
-					url: meme.url
+					url: meme
 				}
 			});
 
 			message.channel.send(embed);
+		}).catch(err => {
+			if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+			if(data.lang === "en") sendE("An error occurred, try again later...");
+
+			return log(err, "ERROR");
 		});
 	};
 };

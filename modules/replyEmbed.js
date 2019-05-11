@@ -47,7 +47,7 @@ exports.sendError = function(text, message, timeout) {
 	message.channel.send(rEmbed).then(c => {
 		//timeout is in sec
 		if(timeout) {
-			var timer = timeout / 1000;
+			var timer = timeout * 1000; //I'm idiot!
 
 			setTimeout(function() {
 				c.delete().catch();
@@ -90,7 +90,7 @@ exports.sendConfirm = function(text, message, timeout) {
 	message.channel.send(rEmbed).then(c => {
 		//timeout is in sec
 		if(timeout) {
-			var timer = timeout / 1000;
+			var timer = timeout * 1000; //I'm idiot!
 
 			setTimeout(function() {
 				c.delete().catch();

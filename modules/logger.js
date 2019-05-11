@@ -36,7 +36,10 @@ module.exports = (message, level, bot, filepath) => {
 			colored.level = chalk.bgRed(level);
 		break;
 
-		default: colored.level = chalk.green("INFO");
+		default:
+			colored.level = chalk.green("INFO");
+			level = "INFO";
+		break;
 	};
 
 
@@ -47,7 +50,13 @@ module.exports = (message, level, bot, filepath) => {
 	};
 
 	console.log(`${chalk.magenta(`[${date}] [${time}]`)} [${chalk.gray(source)}/${colored.level}] : ${message}`);
-	bot.channels.get(config.logId).send(`[${date}] [${time}] [${source}/${level}] : ${message}`).then(temp => {
+
+	if(message.length > 2000) {
+		if(level === "FATAL") process.exit(1);
+		return;
+	};
+
+	bot.channels.get(config.logId).send(`[${date}] [${time}] [${source}/${level}] : ${message}`).then(() => {
 		if(level === "FATAL") process.exit(1);
 	}).catch();
 };

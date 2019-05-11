@@ -11,7 +11,7 @@ module.exports = class facts {
 	constructor() {
 		this.name = "facts",
 		this.alias = ["fact"],
-		this.usage = "/facts <subject:dog, cat, panda>";
+		this.usage = "/facts <subject:dog, cat, panda, fox>";
 	};
 
 	run(bot, message, args, data, settings, db) {
@@ -21,9 +21,9 @@ module.exports = class facts {
 
 		if(args.length === 2) {
 			//BUG with using if(args[1] !== ("dog" || "cat" || "panda")) {...};, it takes only "dog". Cause with the CommandHandler?
-			if((args[1] !== "dog") && (args[1] !== "cat") && (args[1] !== "panda")) {
-				if(data.lang === "fr") return sendE("Argument 'subject' invalide. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda>");
-				if(data.lang === "en") return sendE("Argument 'subject' invalid. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda>");
+			if((args[1] !== "dog") && (args[1] !== "cat") && (args[1] !== "panda") && (args[1] !== "fox")) {
+				if(data.lang === "fr") return sendE("Argument 'subject' invalide. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox>");
+				if(data.lang === "en") return sendE("Argument 'subject' invalid. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox>");
 			};
 
 			request("https://some-random-api.ml/facts/" + args[1], function(err, response, body) {
@@ -46,8 +46,8 @@ module.exports = class facts {
 				message.channel.send(embed);
 			});
 		} else {
-			if(data.lang === "fr") return sendE("Argument 'subject' absent. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda>");
-			if(data.lang === "en") return sendE("Argument 'subject' absent. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda>");
+			if(data.lang === "fr") return sendE("Argument 'subject' absent. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox>");
+			if(data.lang === "en") return sendE("Argument 'subject' absent. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox>");
 		};
 	};
 };
