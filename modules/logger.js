@@ -58,5 +58,5 @@ module.exports = (message, level, bot, filepath) => {
 
 	bot.channels.get(config.logId).send(`[${date}] [${time}] [${source}/${level}] : ${message}`).then(() => {
 		if(level === "FATAL") process.exit(1);
-	}).catch();
+	}).catch(err => console.log("Un évenement n'a pas pû être affiché"));
 };

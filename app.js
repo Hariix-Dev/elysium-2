@@ -6,27 +6,23 @@ require("dotenv").config();
 const { CommandHandler } = require("djs-commands");
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
-const request = require("request");
+const fetch = require("node-fetch");
 const chalk = require("chalk");
 
 if(parseInt(process.versions.node.split(".")[0]) < 8) {
-	request(process.env.SERVER + "requirements.json", function(err, response, body) {
-		let data = JSON.parse(body);
+	fetch(process.env.SERVER + "requirements.json").then(res => res.json().then(data => {
 		let versions = data.testedVersions;
-
 		console.error("Vous utiliser une version non supportée de node.js. Version actuelle: " + process.versions.node + ", Versions recommandées: 11.12.0 ou " + versions.join(", "));
-	});
+	})).catch();
 };
 
 const converter = require("./modules/hexConverter");
 const colors = require("./assets/colors.json");
 const config = require("./assets/config.json");
-const reply = require("./modules/replyEmbed");
 const logger = require("./modules/logger");
 
 const Users = require("./models/users");
 const Servers = require("./models/servers");
-const Bans = require("./models/bans");
 const Globals = require("./models/globals");
 
 const bot = new Discord.Client({
@@ -91,7 +87,7 @@ bot.on("message", message => {
 			}));
 		};
 
-		const settings = {
+		let settings = {
 			defaultLang: res.lang,
 			prefix: res.prefix,
 			currency: res.money_char,
@@ -103,91 +99,113 @@ bot.on("message", message => {
 
 		CH.prefix = settings.prefix;
 
-		Users.findOne({server_id: message.guild.id, user_id: message.author.id}, (err, res) => {
-			if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
-
-			if(!res) {
-				const newUser = new Users({
+		Globals.findOne({user_id: message.author.id}, (err, g) => {
+			if(err) return log(err, "ERROR");
+	
+			if(!g) {
+				const newG = new Globals({
 					user_id: message.author.id,
-					server_id: message.guild.id,
-					lang: settings.defaultLang,
-					messages: 0,
-					caracters: 0,
-					money: settings.startMoney,
-					xp: 0,
-					level: 0,
-					bans: 0,
-					kicks: 0,
-					perms: []
+					lang: "fr",
+					memes: [],
+					jokes: [],
+					slot_wins: 0,
+					slot_games: 0,
+					slot_loses: 0,
+					slot_lose_money: 0,
+					slot_won_money: 0
 				});
-
-				return newUser.save().catch(err => {
-					return log("message: Une erreur est survenue lors de la création du compte de " + chalk.green(message.author.id) + " sur le serveur " + chalk.green(message.guild.id) + ": " + err, "ERROR");
+	
+				return newG.save().catch(err => {
+					return log("guildMemberAdd: Une erreur est survenue lors de la création du compte de " + chalk.green(message.author.id) + ": " + err);
 				});
-			};
+			} else settings.defaultLang = g.lang;
 
-			const args = message.content.split(" ");
-			const command = args[0];
-			const cmd = CH.getCommand(command);
-
-			const data = {
-				lang: res.lang,
-				stats: {
-					messageSents: res.messages,
-					caractersSents: res.caracters,
-					money: res.money,
-					xp: res.xp,
-					level: res.level
-				},
-				sanctions: {
-					bans: res.bans,
-					kicks: res.kicks
-				},
-				perms: res.permissions
-			};
-
-			if(!cmd) {
-				let reward;
-
-				if(message.content.length >= 200) {
-					reward = Math.floor(Math.random() * 22) + 1;
-				} else reward = Math.floor(Math.random() * 17) + 1;
-
-				const serial = require("./assets/serial.json");
-				const pos = data.stats.level + 1;
-
-				if(data.stats.xp >= serial[pos]) {
-					res.level++;
-
-					if(data.lang == "fr") {
-						message.channel.send(new Discord.RichEmbed({
-							color: converter.hexToDec(colors.blue),
-							title: ":bell: " + message.author.username + ", vous passez au niveau **" + pos + "**!"
-						}));
-					} else {
-						if(data.lang == "en") {
+			Users.findOne({server_id: message.guild.id, user_id: message.author.id}, (err, res) => {
+				if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
+	
+				if(!res) {
+					const newUser = new Users({
+						user_id: message.author.id,
+						server_id: message.guild.id,
+						lang: settings.defaultLang,
+						messages: 0,
+						caracters: 0,
+						money: settings.startMoney,
+						xp: 0,
+						level: 0,
+						bans: 0,
+						kicks: 0,
+						perms: []
+					});
+	
+					return newUser.save().catch(err => {
+						return log("message: Une erreur est survenue lors de la création du compte de " + chalk.green(message.author.id) + " sur le serveur " + chalk.green(message.guild.id) + ": " + err, "ERROR");
+					});
+				};
+	
+				const args = message.content.split(" ");
+				const command = args[0];
+				const cmd = CH.getCommand(command);
+	
+				const data = {
+					lang: res.lang,
+					stats: {
+						messageSents: res.messages,
+						caractersSents: res.caracters,
+						money: res.money,
+						xp: res.xp,
+						level: res.level
+					},
+					sanctions: {
+						bans: res.bans,
+						kicks: res.kicks
+					},
+					perms: res.permissions
+				};
+	
+				if(!cmd) {
+					let reward;
+	
+					if(message.content.length >= 200) {
+						reward = Math.floor(Math.random() * 22) + 1;
+					} else reward = Math.floor(Math.random() * 17) + 1;
+	
+					const serial = require("./assets/serial.json");
+					const pos = data.stats.level + 1;
+	
+					if(data.stats.xp >= serial[pos]) {
+						res.level++;
+	
+						if(data.lang == "fr") {
 							message.channel.send(new Discord.RichEmbed({
 								color: converter.hexToDec(colors.blue),
-								title: ":bell: " + message.author.username + ", you're going to level **" + pos + "**!"
+								title: ":bell: " + message.author.username + ", vous passez au niveau **" + pos + "**!"
 							}));
+						} else {
+							if(data.lang == "en") {
+								message.channel.send(new Discord.RichEmbed({
+									color: converter.hexToDec(colors.blue),
+									title: ":bell: " + message.author.username + ", you're going to level **" + pos + "**!"
+								}));
+							};
 						};
 					};
+	
+					res.xp += reward;
+					res.messages++;
+					res.caracters += message.content.length;
+					
+					return res.save().catch(err => {
+						return log("La mise à jour du niveau de l'utilisateur '" + message.author.id + "' à échouée sur le serveur '" + message.guild.id + "': " + err, "ERROR");
+					});
+				} else {
+					try {
+						cmd.run(bot, message, args, data, settings, "out");
+					} catch(e) {
+						log("La commande à rencontrée un problème:\n" + e, "ERROR");
+					};
 				};
-
-				res.xp += reward;
-				res.messages++;
-				res.caracters += message.content.length;
-				
-				return res.save().catch(err => {
-					return log("La mise à jour du niveau de l'utilisateur '" + message.author.id + "' à échouée sur le serveur '" + message.guild.id + "': " + err, "ERROR");
-				});
-			} else {
-				try {
-					cmd.run(bot, message, args, data, settings, mongoose);
-				} catch(e) {
-					log("La commande à rencontrée un problème:\n" + e, "ERROR");
-				};
-			};
+			});
 		});
 	});
 });
@@ -255,38 +273,62 @@ bot.on("guildMemberRemove", member => {
 */
 
 bot.on("guildMemberAdd", member => {
-	Servers.findOne({server_id: message.guild.id}, (err, res) => {
+	Servers.findOne({server_id: member.guild.id}, (err, res) => {
 		if(err) return log("Les paramètres du serveur " + chalk.green("'" + member.guild.id + "'") + " n'ont pas pû être obtenus: " + err, "ERROR");
 
 		if(!res) return createServer(member.guild);
 
-		const settings = {
+		let settings = {
 			defaultLang: res.lang,
 			startMoney: res.start_money,
 		};
 
-		Users.findOne({server_id: message.guild.id, user_id: message.author.id}, (err, res) => {
-			if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
+		Globals.findOne({user_id: member.id}, (err, g) => {
+			if(err) return log(err, "ERROR");
 	
-			if(!res) {
-				const newUser = new Users({
+			if(!g) {
+				const newG = new Globals({
 					user_id: member.id,
-					server_id: member.guild.id,
-					lang: settings.defaultLang,
-					messages: 0,
-					caracters: 0,
-					money: settings.startMoney,
-					xp: 0,
-					level: 0,
-					bans: 0,
-					kicks: 0,
-					perms: []
+					lang: "fr",
+					memes: [],
+					jokes: [],
+					slot_wins: 0,
+					slot_games: 0,
+					slot_loses: 0,
+					slot_lose_money: 0,
+					slot_won_money: 0
 				});
 	
-				return newUser.save().catch(err => {
-					return log("message: Une erreur est survenue lors de la création du compte de " + chalk.green(member.id) + " sur le serveur " + chalk.green(member.guild.id) + ": " + err, "ERROR");
+				return newG.save().catch(err => {
+					return log("guildMemberAdd: Une erreur est survenue lors de la création du compte de " + chalk.green(member.id) + ": " + err);
 				});
+			} else {
+				settings.defaultLang = g.lang;
 			};
+
+			Users.findOne({server_id: member.guild.id, user_id: member.id}, (err, res) => {
+				if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
+		
+				if(!res) {
+					const newUser = new Users({
+						user_id: member.id,
+						server_id: member.guild.id,
+						lang: settings.defaultLang,
+						messages: 0,
+						caracters: 0,
+						money: settings.startMoney,
+						xp: 0,
+						level: 0,
+						bans: 0,
+						kicks: 0,
+						perms: []
+					});
+		
+					return newUser.save().catch(err => {
+						return log("guildMemberAdd: Une erreur est survenue lors de la création du compte de " + chalk.green(member.id) + " sur le serveur " + chalk.green(member.guild.id) + ": " + err, "ERROR");
+					});
+				};
+			});
 		});
 	});
 });

@@ -10,7 +10,7 @@ const logger = require("../modules/logger");
 const converter = require("../modules/hexConverter");
 const colors = require("../assets/colors.json");
 const moment = require("moment");
-const request = require("request");
+const fetch = require("node-fetch");
 
 module.exports = class spotify {
 	constructor() {
@@ -44,10 +44,10 @@ module.exports = class spotify {
 			};
 
 			let infos = res.tracks.items[0];
-			let duration, mn, s;
+			let duration;
 
-			mn = moment.duration(infos.duration_ms, "ms").minutes();
-			s = moment.duration(infos.duration_ms, "ms").seconds();
+			const mn = moment.duration(infos.duration_ms, "ms").minutes();
+			const s = moment.duration(infos.duration_ms, "ms").seconds();
 
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(colors.purple),
@@ -61,11 +61,14 @@ module.exports = class spotify {
 				}
 			});
 
-			let author;
+			let opts = {
+				method: "get",
+				headers: {
+					"Authorization": "Bearer " + spotify.token.access_token
+				}
+			};
 
-			request(infos.artists[0].href, {auth: {bearer: spotify.token.access_token}}, (err, res, body) => {//why I don't use the stotify wrapper here?
-				author = JSON.parse(body);
-
+			fetch(infos.artists[0].href, opts).then(res => res.json().then(author => {
 				let followers = author.followers.total.toLocaleString();
 
 				if(data.lang === "fr") {
@@ -93,6 +96,8 @@ module.exports = class spotify {
 				};
 	
 				message.channel.send(embed).catch();
+			})).catch(err => {
+				return log("#2" + err);
 			});
 		}).catch(function(err) {
 			log(err, "ERROR");

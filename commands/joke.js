@@ -5,7 +5,8 @@ const reply = require("../modules/replyEmbed");
 const Discord = require("discord.js");
 const converter = require("../modules/hexConverter");
 const logger = require("../modules/logger");
-const request = require("request");
+const fetch = require("node-fetch");
+const Globals = require("../models/globals");
 
 module.exports = class joke {
 	constructor() {
@@ -26,15 +27,7 @@ module.exports = class joke {
 		//TODO: User can save jokes in an general account, accessible on all servers
 
 		if(data.lang === "fr") {
-			request("https://bridge.buddyweb.fr/api/blagues/blagues", function(err, response, body) {
-				if(err || response.statusCode != 200) {
-					if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
-					if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
-
-					return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-				};
-
-				let jokes = JSON.parse(body);
+			fetch("https://bridge.buddyweb.fr/api/blagues/blagues").then(res => res.json().then(jokes => {
 				let random = Math.floor(Math.random() * (jokes.length + 1));
 
 				let joke = jokes[random].blagues;
@@ -46,7 +39,30 @@ module.exports = class joke {
 					description: "**" + joke + "**"
 				});
 
-				message.channel.send(embed);
+				message.channel.send(embed).then(n => {
+					n.react("💾").then(() => {
+						bot.on("messageReactionAdd", (reaction, user) => {
+							if(reaction.emoji.name === "💾" && reaction.message.id === n.id && user.id !== bot.user.id) {
+								Globals.findOne({user_id: user.id}, (err, res) => {
+									if(err) return log(err, "ERROR");
+	
+									res.jokes.push(random);
+	
+									res.save().then(() => {
+										n.react("✅").then(r => {
+											r.remove().catch();
+										}).catch();
+									}).catch(err => log(err, "ERROR"));
+								});
+							} else return;
+						});
+					}).catch(err => log(err, "ERROR"));
+				});
+			})).catch(err => {
+				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+				if(data.lang === "en") sendE("An error occurred, try again later...");
+
+				return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
 			});
 		} else {
 			if(data.lang === "en") {

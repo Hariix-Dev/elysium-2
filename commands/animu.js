@@ -4,7 +4,7 @@
 const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const converter = require("../modules/hexConverter");
-const request = require("request");
+const fetch = require("node-fetch");
 const logger = require("../modules/logger");
 
 module.exports = class animu {
@@ -26,17 +26,8 @@ module.exports = class animu {
 				if(data.lang === "en") return sendE("Argument 'name' invalid. Syntax:" + settings.prefix + "animu <name:wink, pat, hug>");
 			};
 
-			request("https://some-random-api.ml/animu/" + args[1], function(err, response, body) {
-				if(err || response.statusCode != 200) {
-					if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard... HTTP: " + response.statusCode);
-					if(data.lang === "en") sendE("An error occurred, try again later... HTTP: " + response.statusCode);
-
-					return log("Code: " + response.statusCode + ", Erreur: " + err, "ERROR");
-				};
-
+			fetch("https://some-random-api.ml/animu/" + args[1]).then(res => res.json().then(image => {
 				let hex = Math.floor(Math.random() * 16777215).toString(16);
-
-				let image = JSON.parse(body);
 
 				let embed = new Discord.RichEmbed({
 					color: converter.hexToDec(hex),
@@ -45,7 +36,19 @@ module.exports = class animu {
 					}
 				});
 
+				let title;
+
+				if(data.lang === "fr") title = "Impossible de voir l'image? Cliquez ici! Discord n'aime pas les grandes images.";
+				if(data.lang === "en") title = "Can't see the image? Click here! Discord does not like large images.";
+
+				embed.setTitle(title).setURL(image.link);
+
 				message.channel.send(embed);
+			})).catch(err => {
+				if(data.lang === "fr") sendE("Une erreur est survenue, réessayer plus tard...");
+				if(data.lang === "en") sendE("An error occurred, try again later...");
+
+				return log(err, "ERROR");
 			});
 		} else {
 			if(data.lang === "fr") return sendE("Argument 'name' absent. Syntaxe: " + settings.prefix + "animu <name:wink, pat, hug>");

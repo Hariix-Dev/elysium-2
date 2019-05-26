@@ -4,7 +4,7 @@
 const Discord = require("discord.js");
 const reply = require("../modules/replyEmbed");
 const logger = require("../modules/logger");
-const request = require("request");
+const fetch = require("node-fetch");
 const converter = require("../modules/hexConverter");
 const colors = require("../assets/colors.json");
 
@@ -35,43 +35,38 @@ module.exports = class country {
 			link = "http://restcountries.eu/rest/v2/name/" + code + "?fulltext=true";
 		};
 
-		request(link, function(err, response, body) {
-			if(err) {
-				if(data.lang === "fr") return sendE("Une erreur est survenue, réessayer plus tard... " + response.statusCode);
-				if(data.lang === "en") return sendE("An error occurred, try again later... " + response.statusCode);
-
-				log(err, "ERROR");
-			};
-
-			if(response.statusCode === 404) {
+		fetch(link).then(res => {
+			if(!res.ok) {
 				if(data.lang === "fr") return sendE("'" + code + "' n'est pas reconnue comme un pays.");
 				if(data.lang === "en") return sendE("'" + code + "' is not a country.");
-			} else if(response.statusCode != 200) {
-				if(data.lang === "fr") return sendE("Une erreur est survenue, réessayer plus tard... " + response.statusCode);
-				if(data.lang === "en") return sendE("An error occurred, try again later... " + response.statusCode);
 			};
 
-			let result = JSON.parse(body)[0];
+			res.json().then(result => {
+				let embed;
 
-			let embed;
+				if(data.lang === "fr") {
+					embed = new Discord.RichEmbed({
+						color: converter.hexToDec(colors.white),
+						title: result.name,
+						author: {
+							icon_url: result.flag,
+							name: "Informations sur un Pays"
+						},
+						thumbnail: {
+							url: result.flag
+						}
+					});
+				} else if(data.lang === "en") {
 
-			if(data.lang === "fr") {
-				embed = new Discord.RichEmbed({
-					color: converter.hexToDec(colors.white),
-					title: result.name,
-					author: {
-						icon_url: result.flag,
-						name: "Informations sur un Pays"
-					},
-					thumbnail: {
-						url: result.flag
-					}
-				});
-			} else if(data.lang === "en") {
+				};
 
-			};
+				message.channel.send(embed);
+			});
+		}).catch(err => {
+			if(data.lang === "fr") return sendE("Une erreur est survenue, réessayer plus tard...");
+			if(data.lang === "en") return sendE("An error occurred, try again later...");
 
-			message.channel.send(embed);
+			log(err, "ERROR");
 		});
 	};
 };

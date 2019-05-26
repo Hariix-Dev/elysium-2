@@ -6,17 +6,19 @@ const mongoose = require("mongoose");
 const GlobalsSchema = mongoose.Schema({
 	user_id: String,
 	lang: String,
-	fortnite_name: String,
-	minecraft_name: String,
 	memes: Array,
 	jokes: Array,
 
 	slot_wins: Number,
 	slot_games: Number,
 	slot_loses: Number,
-	//slot_equals: Number,
+
 	slot_lose_money: Number,
-	slot_won_money: Number
+	slot_won_money: Number,
+
+	rps_wins: Number,
+	rps_games: Number,
+	rps_loses: Number
 });
 
 module.exports = mongoose.model("Globals", GlobalsSchema);

@@ -6,3 +6,4 @@ package-lock.json
 TODO.txt
 docs
 /commands/sms.js
+test.js

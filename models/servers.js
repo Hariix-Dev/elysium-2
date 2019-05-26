@@ -10,6 +10,7 @@ const ServersSchema = mongoose.Schema({
 	money_char: String,
 	start_money: Number,
 	announcements_channel_id: String,
+	mods_roles: [],
 	music_voice_id: String,
 	options: Number
 });
