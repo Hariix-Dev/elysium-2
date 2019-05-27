@@ -213,7 +213,7 @@ bot.on("message", message => {
 bot.on("ready", () => {
 	log("Client prêt et connecté à Discord.", "INFO");
 
-	bot.user.setActivity("Elysium", {
+	bot.user.setActivity(config.name, {
 		type: "WATCHING"
 	}).catch();
 

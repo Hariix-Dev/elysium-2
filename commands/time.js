@@ -14,7 +14,7 @@ module.exports = class time {
 	};
 
 	run(bot, message, args, data, settings, db) {
-		moment.locale("fr");
+		moment.locale(data.lang);
 
 		let time = moment().format("Do MMMM YYYY, HH:mm:ss");
 

@@ -23,7 +23,7 @@ module.exports = class pay {
 			const pUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
 			const amount = Number(args[1]);
 
-			if(isNaN(amount)) {
+			if(isNaN(amount) || !isFinite(amount)) {
 				if(data.lang === "fr") return sendE("Argument 'amount' incorrect. Syntaxe: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
 				if(data.lang === "en") return sendE("Incorrect 'amount' argument. Syntax: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
 			};

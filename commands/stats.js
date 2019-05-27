@@ -81,43 +81,7 @@ module.exports = class stats {
 					message.channel.send(embed).catch();
 				});
 			break;
-
-			case 4:
-				if(!message.member.hasPermission("MANAGE_GUILD", false, true, true)) {
-					if(data.lang === "fr") return sendE("Vous n'avez pas la permission de faire cela.");
-					if(data.lang === "en") return sendE("You do not have permission to do that.");
-				};
-
-				args.shift();
-				mUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-				const action = args[1];
-				const value = Number(args[2]);
-
-				let m;
-
-				if(isNaN(value)) {
-					if(data.lang === "fr") return sendE("Argument 'value' incorrect. Syntaxe: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
-					if(data.lang === "en") return sendE("Incorrect 'value' argument. Syntax: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
-				};
-
-				if(value < 0) {
-					if(data.lang === "fr") return sendE("L'Argument 'value' doit être supérieur à zéro.");
-					if(data.lang === "en") return sendE("Incorrect 'value' argument.");
-				};
-
-				if(!mUser) {
-					if(data.lang === "fr") return sendE("Je n'ai pas trouvée cette utilisateur.");
-					if(data.lang === "en") return sendE("Couldn't find this user.");
-				};
-
-				switch(action) {
-					case "set":
-						Users.findOne({user_id: mUser.id, server_id: message.guild.id}, (err, res) => {
-							if(err) {
-								log(err, "ERROR");
-		
-						
-		
+			
 			default:
 				if(data.lang === "fr") return sendE("Argument 'user' incorrect. Syntaxe: " + settings.prefix + "money [@user]");
 				if(data.lang === "en") return sendE("Incorrect 'user' argument. Syntax: " + settings.prefix + "money [@user]");

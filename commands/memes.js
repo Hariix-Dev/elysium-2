@@ -43,13 +43,19 @@ module.exports = class memes {
 							Globals.findOne({user_id: user.id}, (err, res) => {
 								if(err) return log(err, "ERROR");
 
-								res.memes.push(m.url);
+								if(!res.memes.includes(m.url)) {
+									res.memes.push(m.url);
 
-								res.save().then(() => {
-									n.react("✅").then(r => {
+									res.save().then(() => {
+										n.react("✅").then(r => {
+											r.remove().catch();
+										}).catch();
+									}).catch(err => log(err, "ERROR"));
+								} else {
+									n.react("❌").then(r => {
 										r.remove().catch();
 									}).catch();
-								}).catch(err => log(err, "ERROR"));
+								};
 							});
 						} else return;
 					});

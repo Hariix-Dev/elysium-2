@@ -94,7 +94,7 @@ module.exports = class money {
 
 				let m;
 
-				if(isNaN(value)) {
+				if(isNaN(value) || !isFinite(value)) {
 					if(data.lang === "fr") return sendE("Argument 'value' incorrect. Syntaxe: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
 					if(data.lang === "en") return sendE("Incorrect 'value' argument. Syntax: " + settings.prefix + "money [@user] [action:set, add, remove] [value]");
 				};
