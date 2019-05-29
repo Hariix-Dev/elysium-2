@@ -15,7 +15,7 @@ module.exports = class ping {
 		
 		message.channel.send("Pong!").then(temp => {
 			let diff = (Date.now() - start);
-			temp.edit("Pong! **" + diff + "ms**. API Ping: **" + bot.ping * 1 + "ms**.").catch();
+			temp.edit("Pong! **" + diff + "ms**. API Ping: **" + (bot.ping).toFixed(3) + "ms**.").catch();
 
 			setTimeout(function() {
 				temp.delete().catch();
