@@ -21,6 +21,10 @@ module.exports = class evalc {
 		const dir = require("../modules/data");
 		const fs = require("fs");
 		const Discord = require("discord.js");
+		const Users = require("../models/users");
+		const Globals = require("../models/globals");
+		const Servers = require("../models/servers");
+		const Bans = require("../models/bans");
 
 		const log = (text, level) => logger(text, level, bot, __filename);
 

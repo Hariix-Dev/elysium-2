@@ -6,6 +6,7 @@ const colors = require("../assets/colors.json");
 const converter = require("../modules/hexConverter");
 const file = require("../modules/data");
 const infos = require("../package.json");
+const fs = require("fs");
 
 module.exports = class info {
 	constructor() {
@@ -15,12 +16,13 @@ module.exports = class info {
 	};
 
 	run(bot, message, args, data, settings, db) {
-		let version = infos.version;
-		let arch = process.arch;
-		let platform = process.platform;
-		let node = process.versions.node;
-		let servers = bot.guilds.size;
-		let users = bot.users.size;
+		const version = infos.version;
+		const arch = process.arch;
+		const platform = process.platform;
+		const node = process.versions.node;
+		const servers = bot.guilds.size;
+		const users = bot.users.size;
+		const size = fs.readdirSync("../");
 
 		let embed;
 

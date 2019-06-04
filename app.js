@@ -120,10 +120,10 @@ bot.on("message", message => {
 				});
 			} else settings.defaultLang = g.lang;
 
-			Users.findOne({server_id: message.guild.id, user_id: message.author.id}, (err, res) => {
+			Users.findOne({server_id: message.guild.id, user_id: message.author.id}, (err, u) => {
 				if(err) return log("message: Une erreur est survenue lors de la recherche de l'utilisateur: " + err, "FATAL");
 	
-				if(!res) {
+				if(!u) {
 					const newUser = new Users({
 						user_id: message.author.id,
 						server_id: message.guild.id,
@@ -148,19 +148,19 @@ bot.on("message", message => {
 				const cmd = CH.getCommand(command);
 	
 				const data = {
-					lang: res.lang,
+					lang: u.lang,
 					stats: {
-						messageSents: res.messages,
-						caractersSents: res.caracters,
-						money: res.money,
-						xp: res.xp,
-						level: res.level
+						messageSents: u.messages,
+						caractersSents: u.caracters,
+						money: u.money,
+						xp: u.xp,
+						level: u.level
 					},
 					sanctions: {
-						bans: res.bans,
-						kicks: res.kicks
+						bans: u.bans,
+						kicks: u.kicks
 					},
-					perms: res.permissions
+					perms: u.permissions
 				};
 	
 				if(!cmd) {
@@ -174,7 +174,7 @@ bot.on("message", message => {
 					const pos = data.stats.level + 1;
 	
 					if(data.stats.xp >= serial[pos]) {
-						res.level++;
+						u.level++;
 	
 						if(data.lang == "fr") {
 							message.channel.send(new Discord.RichEmbed({
@@ -191,11 +191,11 @@ bot.on("message", message => {
 						};
 					};
 	
-					res.xp += reward;
-					res.messages++;
-					res.caracters += message.content.length;
+					u.xp += reward;
+					u.messages++;
+					u.caracters += message.content.length;
 					
-					return res.save().catch(err => {
+					return u.save().catch(err => {
 						return log("La mise à jour du niveau de l'utilisateur '" + message.author.id + "' à échouée sur le serveur '" + message.guild.id + "': " + err, "ERROR");
 					});
 				} else {

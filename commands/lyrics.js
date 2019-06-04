@@ -20,6 +20,11 @@ module.exports = class lyrics {
 
 		var log = (txt, level) => logger(txt, level, bot, __filename);
 
+		if(args.length === 1) {
+			if(data.lang === "fr") return sendE("Veuillez indiquer le nom d'une musique.");
+			if(data.lang === "en") return sendE("Please indicate the name of a music.");
+		};
+
 		args.shift();
 
 		api.lyrics(args).then(lyrics => {
