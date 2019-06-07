@@ -26,9 +26,11 @@ module.exports = class leadersboard {
 			if(err) return log(err, "ERROR");
 
 			let l = "";
+			let pos = 1;
 
 			res.forEach(element => {
-				l += (message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + ",\n");
+				l += (pos.toString() + ". " + message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + ",\n");
+				pos++;
 			});
 
 			let embed = new Discord.RichEmbed({
