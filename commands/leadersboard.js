@@ -25,13 +25,20 @@ module.exports = class leadersboard {
 		}).sort({money: -1}).exec((err, res) => {
 			if(err) return log(err, "ERROR");
 
+			let l = "";
+
+			res.forEach(element => {
+				l += (message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + ",\n");
+			});
+
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(colors.pistache),
 				timestamp: Date.now(),
 				footer: {
 					text: message.author.tag,
 					icon_url: message.author.avatarURL
-				}
+				},
+				description: l
 			});
 
 			if(data.lang === "fr") embed.setAuthor("Leadersboard de " + message.guild.name, message.guild.iconURL);
