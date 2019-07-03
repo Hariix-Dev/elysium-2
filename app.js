@@ -222,6 +222,8 @@ bot.on("ready", () => {
 
 		log("Base de données connectée avec succés.", "INFO");
 	});
+
+	fetch("https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=I7xgCtn8374&key=" + process.env.YOUTUBE).catch();
 });
 
 bot.on("guildMemberAdd", member => {

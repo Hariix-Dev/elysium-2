@@ -28,6 +28,11 @@ module.exports = class yt {
 		const link = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=" + args + "&key=" + process.env.YOUTUBE;
 
 		fetch(link).then(res => res.json().then(result => {
+			if(!result.items) {
+				if(data.lang === "fr") return sendE("Pas de résultat trouvés...");
+				if(data.lang === "en") return sendE("No result found...");
+			};
+			
 			let video = result.items[0];
 
 			let embed = new Discord.RichEmbed({

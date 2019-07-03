@@ -11,7 +11,7 @@ const colors = require("../assets/colors.json");
 module.exports = class leadersboard {
 	constructor() {
 		this.name = "leadersboard",
-		this.alias = ["lb"],
+		this.alias = ["lb", "baltop"],
 		this.usage = "/leadersboard";
 	};
 
@@ -21,7 +21,7 @@ module.exports = class leadersboard {
 		const sendE = (text, timeout) => reply.sendError(text, message, timeout);
 
 		Users.find({}, ["user_id", "money"], {
-			limit: 10
+			limit: 20
 		}).sort({money: -1}).exec((err, res) => {
 			if(err) return log(err, "ERROR");
 
@@ -29,7 +29,12 @@ module.exports = class leadersboard {
 			let pos = 1;
 
 			res.forEach(element => {
-				l += (pos.toString() + ". " + message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + ",\n");
+				if(element.user_id === message.author.id) {
+					l += ("__**" + pos.toString() + ". " + message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + "**__,\n");
+				} else {
+					l += (pos.toString() + ". " + message.guild.members.get(element.user_id) + ": " + element.money + settings.currency + ",\n");
+				};
+				
 				pos++;
 			});
 
