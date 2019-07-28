@@ -21,9 +21,9 @@ module.exports = class facts {
 
 		if(args.length === 2) {
 			//BUG with using if(args[1] !== ("dog" || "cat" || "panda")) {...};, it takes only "dog". Cause with the CommandHandler?
-			if((args[1] !== "dog") && (args[1] !== "cat") && (args[1] !== "panda") && (args[1] !== "fox")) {
-				if(data.lang === "fr") return sendE("Argument 'subject' invalide. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox>");
-				if(data.lang === "en") return sendE("Argument 'subject' invalid. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox>");
+			if((args[1] !== "dog") && (args[1] !== "cat") && (args[1] !== "panda") && (args[1] !== "fox") && (args[1] !== "koala") && (args[1] !== "bird")) {
+				if(data.lang === "fr") return sendE("Argument 'subject' invalide. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox, koala, bird>");
+				if(data.lang === "en") return sendE("Argument 'subject' invalid. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox, koala, bird>");
 			};
 			
 			fetch("https://some-random-api.ml/facts/" + args[1]).then(res => res.json().then(fact => {
@@ -42,8 +42,8 @@ module.exports = class facts {
 				return log(err, "ERROR");
 			});
 		} else {
-			if(data.lang === "fr") return sendE("Argument 'subject' absent. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox>");
-			if(data.lang === "en") return sendE("Argument 'subject' absent. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox>");
+			if(data.lang === "fr") return sendE("Argument 'subject' absent. Syntaxe: " + settings.prefix + "facts <subject:dog, cat, panda, fox, koala, bird>");
+			if(data.lang === "en") return sendE("Argument 'subject' absent. Syntax:" + settings.prefix + "facts <subject:dog, cat, panda, fox, koala, bird>");
 		};
 	};
 };
