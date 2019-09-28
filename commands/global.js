@@ -9,6 +9,8 @@ module.exports = class global {
 	constructor() {
 		this.name = "global",
 		this.alias = [],
+		this.en = "Change value of your global account.",
+		this.fr = "Modifie des valeurs de votre compte.",
 		this.usage = "/global <var: lang>";
 	};
 

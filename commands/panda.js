@@ -11,6 +11,8 @@ module.exports = class panda {
 	constructor() {
 		this.name = "panda",
 		this.alias = [],
+		this.en = "Give an image of an panda.",
+		this.fr = "Donne une image d'un panda.",
 		this.usage = "/panda";
 	};
 

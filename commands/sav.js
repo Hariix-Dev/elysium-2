@@ -13,6 +13,8 @@ module.exports = class sav {
 	constructor() {
 		this.name = "sav",
 		this.alias = ["saved"],
+		this.en = "Show saved memes and jokes.",
+		this.fr = "Montres vos blagues et memes sauvegardées.",
 		this.usage = "/sav <type: memes, jokes>";
 	};
 

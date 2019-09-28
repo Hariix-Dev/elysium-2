@@ -8,6 +8,8 @@ module.exports = class roll {
 	constructor() {
 		this.name = "roll",
 		this.alias = [],
+		this.en = "Roll a dice.",
+		this.fr = "Lance un dé.",
 		this.usage = "/roll";
 	};
 

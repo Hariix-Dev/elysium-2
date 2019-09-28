@@ -12,6 +12,8 @@ module.exports = class joke {
 	constructor() {
 		this.name = "joke",
 		this.alias = [],
+		this.en = "Give an joke. EN not supported.",
+		this.fr = "Donne des blagues.",
 		this.usage = "/joke";
 	};
 

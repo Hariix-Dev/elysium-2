@@ -12,6 +12,8 @@ module.exports = class country {
 	constructor() {
 		this.name = "country",
 		this.alias = [],
+		this.en = "Get infos about an country",
+		this.fr = "Donne des informations sur un pays.",
 		this.usage = "/country <code>";
 	};
 

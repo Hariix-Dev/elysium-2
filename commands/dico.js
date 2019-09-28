@@ -8,6 +8,8 @@ module.exports = class dico {
 	constructor() {
 		this.name = "def",
 		this.alias = ["dico", "dictionary"],
+		this.en = "unknow",
+		this.fr = "unknow",
 		this.usage = "/def <word>";
 	};
 

@@ -13,6 +13,8 @@ module.exports = class userinfo {
 	constructor() {
 		this.name = "userinfo",
 		this.alias = ["userinfos", "ui"],
+		this.en = "Get infos about an user.",
+		this.fr = "Donne des informations sur un utilisateur.",
 		this.usage = "/userinfo [@user]";
 	};
 

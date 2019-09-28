@@ -11,6 +11,8 @@ module.exports = class facts {
 	constructor() {
 		this.name = "facts",
 		this.alias = ["fact"],
+		this.en = "Get facts of somes animals.",
+		this.fr = "Donnes des informations sur des animaux.",
 		this.usage = "/facts <subject:dog, cat, panda, fox>";
 	};
 

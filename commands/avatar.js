@@ -10,6 +10,8 @@ module.exports = class avatar {
 	constructor() {
 		this.name = "avatar",
 		this.alias = [],
+		this.en = "Get the avatar of an user.",
+		this.fr = "Donne l'avatar d'un utilisateur.",
 		this.usage = "/avatar [@user]";
 	};
 

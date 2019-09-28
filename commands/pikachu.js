@@ -11,6 +11,8 @@ module.exports = class pikachu {
 	constructor() {
 		this.name = "pikachu",
 		this.alias = ["pika"],
+		this.en = "Give an image of Pikachu.",
+		this.fr = "Donne une image de Pikachu.",
 		this.usage = "/pikachu";
 	};
 

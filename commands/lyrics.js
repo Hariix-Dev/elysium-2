@@ -12,6 +12,8 @@ module.exports = class lyrics {
 	constructor() {
 		this.name = "lyrics",
 		this.alias = ["lyric"],
+		this.en = "Get lyrics of an song",
+		this.fr = "Donne les paroles d'une musique.",
 		this.usage = "/lyrics <title>";
 	};
 

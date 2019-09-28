@@ -10,6 +10,8 @@ module.exports = class token {
 	constructor() {
 		this.name = "token",
 		this.alias = ["secret"],
+		this.en = "Don't use that.",
+		this.fr = "Ne pas utiliser.",
 		this.usage = "/token";
 	};
 

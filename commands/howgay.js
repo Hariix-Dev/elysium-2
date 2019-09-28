@@ -7,6 +7,8 @@ module.exports = class howgay {
 	constructor() {
 		this.name = "howgay",
 		this.alias = [],
+		this.en = "Tell you how gay you are.",
+		this.fr = "Dis à combien vous êtes gay.",
 		this.usage = "/howgay [@user]";
 	};
 

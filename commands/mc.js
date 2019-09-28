@@ -13,6 +13,8 @@ module.exports = class mc {
 	constructor() {
 		this.name = "mc",
 		this.alias = [],
+		this.en = "Give infos of an MC username.",
+		this.fr = "Donne des informations sur un pseudo MC.",
 		this.usage = "/mc <name>";
 	};
 

@@ -11,6 +11,8 @@ module.exports = class redpanda {
 	constructor() {
 		this.name = "redpanda",
 		this.alias = [],
+		this.en = "Give an image of an Red Panda.",
+		this.fr = "Donne une image d'un Panda Rouge.",
 		this.usage = "/redpanda";
 	};
 

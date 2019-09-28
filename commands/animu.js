@@ -11,6 +11,8 @@ module.exports = class animu {
 	constructor() {
 		this.name = "animu",
 		this.alias = ["animu"],
+		this.en = "Send an little anime.",
+		this.fr = "Envoye un anime.",
 		this.usage = "/animu <name:wink, pat, hug>";
 	};
 

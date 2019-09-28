@@ -14,6 +14,8 @@ module.exports = class report {
 	constructor() {
 		this.name = "report",
 		this.alias = ["rep"],
+		this.en = "Report an user.",
+		this.fr = "Reporte un utilsateur.",
 		this.usage = "/report <@user> <reason>";
 	};
 

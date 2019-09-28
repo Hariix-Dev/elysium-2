@@ -7,6 +7,8 @@ module.exports = class spikes {
 	constructor() {
 		this.name = "spikes",
 		this.alias = ["spike"],
+		this.en = "Generate spikes. Not complete at now.",
+		this.fr = "Generate spikes. Not complete at now.",
 		this.usage = "spikes";
 	};
 
@@ -16,6 +18,6 @@ module.exports = class spikes {
 			max: 10
 		});
 
-		message.channel.send("Command not complete.");
+		message.channel.send(spikes);
 	};
 };

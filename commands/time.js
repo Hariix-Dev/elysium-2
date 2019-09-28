@@ -10,6 +10,8 @@ module.exports = class time {
 	constructor() {
 		this.name = "time",
 		this.alias = ["t", "date", "d"],
+		this.en = "Give the time in fr or en.",
+		this.fr = "Donne l'heure en France ou en Amerique.",
 		this.usage = "/time";
 	};
 

@@ -9,6 +9,8 @@ module.exports = class evalc {
 	constructor() {
 		this.name = "eval",
 		this.alias = [],
+		this.en = "owo",
+		this.fr = "owo",
 		this.usage = "/eval <code>";
 	};
 

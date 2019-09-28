@@ -12,6 +12,8 @@ module.exports = class play {
 	constructor() {
 		this.name = "play",
 		this.alias = [],
+		this.en = "unknow",
+		this.fr = "unknow",
 		this.usage = "/play <title>";
 	};
 

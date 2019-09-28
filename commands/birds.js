@@ -11,6 +11,8 @@ module.exports = class birds {
 	constructor() {
 		this.name = "birds",
 		this.alias = ["bird"],
+		this.en = "Get an picture of a bird.",
+		this.fr = "Donne une image d'un oiseau.",
 		this.usage = "/birds";
 	};
 

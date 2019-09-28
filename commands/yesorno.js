@@ -11,6 +11,8 @@ module.exports = class yesorno {
 	constructor() {
 		this.name = "yesorno",
 		this.alias = ["yon"],
+		this.en = "Relpy by yes or no.",
+		this.fr = "Réponds par oui ou par non.",
 		this.usage = "/yesorno";
 	};
 

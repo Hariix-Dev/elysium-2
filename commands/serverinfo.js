@@ -11,6 +11,8 @@ module.exports = class serverinfo {
 	constructor() {
 		this.name = "serverinfo",
 		this.alias = ["serverinfos", "si"],
+		this.en = "Get infos about the server.",
+		this.fr = "Donne des informations sur le serveur.",
 		this.usage = "/serverinfo";
 	};
 

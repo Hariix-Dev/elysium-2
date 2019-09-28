@@ -7,6 +7,8 @@ module.exports = class binary {
 	constructor() {
 		this.name = "binary",
 		this.alias = [],
+		this.en = "Convert text to binary.",
+		this.fr = "Converti du text en binaire.",
 		this.usage = "/binary <message>";
 	};
 

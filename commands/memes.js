@@ -12,6 +12,8 @@ module.exports = class memes {
 	constructor() {
 		this.name = "memes",
 		this.alias = ["meme"],
+		this.en = "Give somes reddits memes.",
+		this.fr = "Donnes des memes de reddits.",
 		this.usage = "/memes";
 	};
 

@@ -6,6 +6,8 @@ module.exports = class ping {
 	constructor() {
 		this.name = "ping",
 		this.alias = [],
+		this.en = "Give the ping.",
+		this.fr = "Ping.",
 		this.usage = "/ping";
 	};
 

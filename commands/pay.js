@@ -9,6 +9,8 @@ module.exports = class pay {
 	constructor() {
 		this.name = "pay",
 		this.alias = [],
+		this.en = "Can give money to an other user.",
+		this.fr = "Donne de l'argent à quelqu'un d'autre.",
 		this.usage = "/pay <@user> <amount>";
 	};
 

@@ -9,6 +9,8 @@ module.exports = class gay {
 	constructor() {
 		this.name = "gay",
 		this.alias = [],
+		this.en = "Apply an rambow to an image.",
+		this.fr = "Applique un effet sur une image.",
 		this.usage = "/gay [url]";
 	};
 

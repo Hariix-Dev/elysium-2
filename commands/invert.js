@@ -9,6 +9,8 @@ module.exports = class invert {
 	constructor() {
 		this.name = "invert",
 		this.alias = [],
+		this.en = "Invert an image.",
+		this.fr = "Inverse une image.",
 		this.usage = "/invert [url]";
 	};
 

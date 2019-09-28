@@ -12,6 +12,8 @@ module.exports = class rank {
 	constructor() {
 		this.name = "rank",
 		this.alias = [],
+		this.en = "Show rank of XP, msg or chars.",
+		this.fr = "Donne le classement d'xp, messages ou de caractères.",
 		this.usage = "/rank [type: xp, messages, caracters]";
 	};
 

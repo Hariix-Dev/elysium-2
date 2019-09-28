@@ -11,6 +11,8 @@ module.exports = class slot {
 	constructor() {
 		this.name = "slot",
 		this.alias = [],
+		this.en = "Play the slot machine.",
+		this.fr = "Joue à la machine à sous.",
 		this.usage = "/slot <bid>";
 	};
 

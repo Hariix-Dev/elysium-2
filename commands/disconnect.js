@@ -8,6 +8,8 @@ module.exports = class disconnect {
 	constructor() {
 		this.name = "disconnect",
 		this.alias = [],
+		this.en = "Force to leave the voice channel.",
+		this.fr = "Quitte le salon vocal.",
 		this.usage = "/disconnect";
 	};
 

@@ -9,6 +9,8 @@ module.exports = class triggered {
 	constructor() {
 		this.name = "triggered",
 		this.alias = [],
+		this.en = "Apply un effet sur une image.",
+		this.fr = "Applique un effet sur une image.",
 		this.usage = "/triggered [url]";
 	};
 

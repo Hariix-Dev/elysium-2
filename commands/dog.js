@@ -13,6 +13,8 @@ module.exports = class dog {
 	constructor() {
 		this.name = "dog",
 		this.alias = [],
+		this.en = "Give an image of an dog.",
+		this.fr = "Donne une image d'un chien.",
 		this.usage = "/dog";
 	};
 

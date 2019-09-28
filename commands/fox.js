@@ -12,6 +12,8 @@ module.exports = class fox {
 	constructor() {
 		this.name = "fox",
 		this.alias = [],
+		this.en = "Give image of an fox",
+		this.fr = "Donne une image d'un renard.",
 		this.usage = "/fox";
 	};
 

@@ -6,6 +6,8 @@ module.exports = class randomcolor {
 	constructor() {
 		this.name = "randomcolor",
 		this.alias = ["color"],
+		this.en = "Give an random color.",
+		this.fr = "Donne une couleur aléatoire.",
 		this.usage = "/randomcolor";
 	};
 

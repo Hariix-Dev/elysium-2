@@ -9,6 +9,8 @@ module.exports = class random {
 	constructor() {
 		this.name = "random",
 		this.alias = [],
+		this.en = "Give random numbers.",
+		this.fr = "Donne des nombres aléatoires.",
 		this.usage = "/random [range:[max],[min] [max]]";
 	};
 

@@ -12,6 +12,8 @@ module.exports = class money {
 	constructor() {
 		this.name = "money",
 		this.alias = [],
+		this.en = "Show your money.",
+		this.fr = "Affiche votre argent.",
 		this.usage = "/money [@user] [action:set, add, remove] [value]";
 	};
 

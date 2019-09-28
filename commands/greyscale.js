@@ -9,6 +9,8 @@ module.exports = class greyscale {
 	constructor() {
 		this.name = "greyscale",
 		this.alias = [],
+		this.en = "Apply an effect on an image.",
+		this.fr = "Applique un effet sur une image.",
 		this.usage = "/greyscale [url]";
 	};
 

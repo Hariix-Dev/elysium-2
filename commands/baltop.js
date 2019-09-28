@@ -12,6 +12,8 @@ module.exports = class leadersboard {
 	constructor() {
 		this.name = "leadersboard",
 		this.alias = ["lb", "baltop"],
+		this.en = "Show the baltop of the server.",
+		this.fr = "Montre le classement du serveur.",
 		this.usage = "/leadersboard";
 	};
 

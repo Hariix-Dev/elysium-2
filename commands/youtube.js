@@ -14,6 +14,8 @@ module.exports = class yt {
 	constructor() {
 		this.name = "youtube",
 		this.alias = ["yt"],
+		this.en = "Search an video by ID.",
+		this.fr = "Recherche une video par ID.",
 		this.usage = "/youtube <id>";
 	};
 

@@ -9,6 +9,8 @@ module.exports = class roles {
 	constructor() {
 		this.name = "roles",
 		this.alias = [],
+		this.en = "Get roles of an user.",
+		this.fr = "Donne la list de roles d'un utilisateur.",
 		this.usage = "/roles";
 	};
 

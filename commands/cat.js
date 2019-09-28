@@ -12,6 +12,8 @@ module.exports = class cat {
 	constructor() {
 		this.name = "cat",
 		this.alias = [],
+		this.en = "Get an image of an cat.",
+		this.fr = "Donne une image d'un chat.",
 		this.usage = "/cat";
 	};
 

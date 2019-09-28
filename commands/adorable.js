@@ -10,6 +10,8 @@ module.exports = class adorable {
 	constructor() {
 		this.name = "adorable",
 		this.alias = ["ad"],
+		this.en = "Create an adorable avatar",
+		this.fr = "Créer un adorable avatar de vous",
 		this.usage = "/adorable [id]";
 	};
 

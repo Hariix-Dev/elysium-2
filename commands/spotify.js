@@ -16,6 +16,8 @@ module.exports = class spotify {
 	constructor() {
 		this.name = "spotify",
 		this.alias = [],
+		this.en = "Search songs on Spotify.",
+		this.fr = "Recherche des musiques sur Spotify.",
 		this.usage = "/spotify <search>";
 	};
 
