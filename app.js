@@ -27,7 +27,7 @@ const Globals = require("./models/globals");
 
 const bot = new Discord.Client({
 	disableEveryone: false
-});
+}).setMaxListeners(0);
 
 const CH = new CommandHandler({
 	folder: __dirname + "/commands/",
