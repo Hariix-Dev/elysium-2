@@ -7,7 +7,7 @@ module.exports = class ping {
 		this.name = "ping",
 		this.alias = [],
 		this.en = "Give the ping.",
-		this.fr = "Ping.",
+		this.fr = "Donne la latence.",
 		this.usage = "/ping";
 	};
 

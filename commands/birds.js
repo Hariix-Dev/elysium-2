@@ -27,7 +27,7 @@ module.exports = class birds {
 			let embed = new Discord.RichEmbed({
 				color: converter.hexToDec(hex),
 				image: {
-					url: img
+					url: "https://i.some-random-api.ml/" + img
 				}
 			});
 

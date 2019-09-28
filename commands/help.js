@@ -16,10 +16,32 @@ module.exports = class help {
 
 	run(bot, message, args, data, settings, db) {
 		const log = (text, level) => logger(text, level, bot, __filename);
+
+		let list = [];
+
 		fs.readdirSync("./commands/").forEach(file => {
 			let temp = require("./" + file);
 			let cmd = new temp();
-			log(cmd.name);
+
+			list.push({
+				usage: cmd.usage,
+				fr: cmd.fr,
+				en: cmd.en
+			});
 		});
+
+		let pages = [{}];
+		let x = 0;
+		let p = 1;
+
+		list.forEach(e => {
+			if(x >= 6) {p++; x = 0};
+			if(data.lang === "en") pages[p] = e.usage + e.en;
+			if(data.lang === "fr") pages[p] = e.usage + e.fr;
+			
+			x++;
+		});
+
+		message.channel.send(pages);
 	};
 };
