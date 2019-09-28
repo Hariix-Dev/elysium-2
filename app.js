@@ -291,7 +291,7 @@ bot.on("guildMemberAdd", member => {
 			if(!g) {
 				const newG = new Globals({
 					user_id: member.id,
-					lang: "fr",
+					lang: "en",
 					memes: [],
 					jokes: [],
 					slot_wins: 0,

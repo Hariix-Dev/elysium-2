@@ -63,7 +63,7 @@ module.exports = class rank {
 			break;
 		};
 
-		Users.find({}, columns, {
+		Users.find({server_id: message.guild.id}, columns, {
 			limit: 20
 		}).sort({level: -1}).exec((err, res) => {
 			if(err) return log(err, "ERROR");

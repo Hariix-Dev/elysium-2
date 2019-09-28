@@ -22,7 +22,7 @@ module.exports = class leadersboard {
 
 		const sendE = (text, timeout) => reply.sendError(text, message, timeout);
 
-		Users.find({}, ["user_id", "money"], {
+		Users.find({server_id: message.guild.id}, ["user_id", "money"], {
 			limit: 20
 		}).sort({money: -1}).exec((err, res) => {
 			if(err) return log(err, "ERROR");
