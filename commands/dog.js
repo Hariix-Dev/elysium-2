@@ -12,7 +12,7 @@ const api = require("some-random-api");
 module.exports = class dog {
 	constructor() {
 		this.name = "dog",
-		this.alias = [],
+		this.alias = ["dogs"],
 		this.en = "Give an image of an dog.",
 		this.fr = "Donne une image d'un chien.",
 		this.usage = "/dog";

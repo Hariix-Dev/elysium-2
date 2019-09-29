@@ -17,7 +17,7 @@ module.exports = class help {
 	run(bot, message, args, data, settings, db) {
 		const log = (text, level) => logger(text, level, bot, __filename);
 
-		let list = [];
+		/**let list = [];
 
 		fs.readdirSync("./commands/").forEach(file => {
 			let temp = require("./" + file);
@@ -42,6 +42,9 @@ module.exports = class help {
 			x++;
 		});
 
-		message.channel.send(pages);
+		log(pages[1]);
+		*/
+
+		
 	};
 };
